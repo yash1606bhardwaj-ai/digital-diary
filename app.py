@@ -1,13 +1,13 @@
 import streamlit as st
 from blockchain import Blockchain
 
-# Initialize the blockchain in session
+st.set_page_config(page_title="Blockchain Diary", layout="wide")
+
+# Initialize blockchain in session
 if "blockchain" not in st.session_state:
     st.session_state.blockchain = Blockchain()
 
 blockchain = st.session_state.blockchain
-
-st.set_page_config(page_title="Blockchain Diary", layout="wide")
 
 # =============================
 # TOP NAVIGATION BAR
@@ -25,7 +25,7 @@ with st.container():
     with cols[4]:
         st.button("💬 Support")
     with cols[5]:
-        st.button("🔍 View Full Entry")
+        st.page_link("pages/1_History.py", label="🔍 View Full History", icon="📜")
 
 # =============================
 # PAGE HEADER
@@ -46,36 +46,4 @@ with st.expander("➕ Add New Entry"):
         else:
             st.warning("Entry cannot be empty.")
 
-# =============================
-# BLOCKCHAIN RECORDS HISTORY
-# =============================
-st.markdown("---")
-st.markdown("### ⛓️ Blockchain Record History")
-
-if len(blockchain.chain) <= 1:
-    st.info("No entries yet. Add your first diary block above.")
-else:
-    for block in reversed(blockchain.chain[1:]):  # skip genesis
-        with st.container():
-            col1, col2, col3, col4 = st.columns([0.5, 2, 2, 1])
-            with col1:
-                st.markdown(f"#### 📦 #{block.index}")
-                st.markdown(f"🕓 {block.timestamp[:16]}")
-            with col2:
-                st.markdown(f"**Entry Summary**: {block.data[:60]}{'...' if len(block.data) > 60 else ''}")
-                st.caption(f"Hash: `{block.hash[:12]}...`")
-            with col3:
-                st.markdown("**Previous Hash**")
-                st.code(block.previous_hash[:16] + "...", language='text')
-            with col4:
-                with st.expander("🔎 View Full Entry"):
-                    st.code(block.data, language='markdown')
-
-# =============================
-# BLOCKCHAIN STATUS
-# =============================
-st.markdown("---")
-if blockchain.is_chain_valid():
-    st.success("✅ Blockchain is valid and untampered.")
-else:
-    st.error("❌ Blockchain integrity compromised!")
+st.markdown("👈 View full diary record from the **History** section.")
