@@ -105,8 +105,13 @@ elif page == "📜 Record History":
                     st.markdown("**Previous Hash**")
                     st.code(block.previous_hash[:16] + "...", language='text')
                 with col4:
-                    with st.expander("🔍 View Full Entry"):
-                        st.code(block.data, language='markdown')
+                    with st.expander("🔍 View Full Entry", expanded=False):
+                     st.markdown(f"""
+                    <div style='padding: 1rem; background-color: #1e1e1e; border-radius: 10px; color: white;'>
+                        {block.data.replace('\n', '<br>')}
+                    </div>
+                    """, unsafe_allow_html=True)
+
 
         st.markdown("---")
         if blockchain.is_chain_valid():
